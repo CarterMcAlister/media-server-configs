@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  tvheadend:
+
+    image: linuxserver/tvheadend
+    container_name: tvheadend
+    privileged: true
+    restart: always
+    network_mode: host
+
+    cpu_shares: 1536
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/docker-tvheadend/config:/config
+
+    environment:
+      - PGID=0
+      - PUID=0
+
+    healthcheck:
+      test: curl --fail -s http://localhost:9981/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3

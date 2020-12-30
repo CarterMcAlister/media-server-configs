@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  ombi:
+
+    image: linuxserver/ombi
+    container_name: ombi
+    privileged: true
+    restart: always
+    ports:
+      - 3579:3579
+
+    volumes:
+      - /opt/docker-ombi/config:/config
+
+    environment:
+      - TZ=UTC
+
+    healthcheck:
+      test: curl --fail -s http://localhost:3579/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3

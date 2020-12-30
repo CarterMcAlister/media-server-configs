@@ -1,0 +1,32 @@
+version: "2"
+# Docker Plex Media Server Configuration File
+
+services:
+  plex:
+    image: plexinc/pms-docker
+
+    container_name: plex
+    privileged: true
+    restart: always
+    network_mode: host
+
+    volumes:
+      # Store the config locally...
+      - /opt/docker-plex/config:/config
+
+      # Map in the volume(s) where your media resides below (you will need to change)...
+      - /mnt/storage
+
+      # Optional directory where you want to store your transcoded files (this should be a SSD)
+      - /opt/docker-plex/transcode-tmp:/transcode
+
+    environment:
+      - TZ=America/Chicago
+      - PLEX_UID=0
+      - PLEX_GID=0
+
+      - CHANGE_CONFIG_DIR_OWNERSHIP=false
+      - DEBUG=true
+
+    # See: https://docs.docker.com/engine/reference/run/#cpu-share-constraint
+    cpu_shares: 2048

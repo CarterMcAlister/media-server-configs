@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  qbittorrent:
+    image: linuxserver/qbittorrent
+    privileged: true
+    container_name: qbittorrent
+    restart: always
+
+    ports:
+      - 8080:8080
+      - 18999:18999/udp
+      - 18999:18999
+
+    volumes:
+      - /opt/docker-qbittorrent/config:/config
+
+      # Map in the volumes where you would like to save your torrent files...
+      - /mnt/storage
+
+    environment:
+      - TZ=America/Chicago
+      - WEBUI_PORT=8080
+      - PUID=0
+      - PGID=0
+      - UMASK_SET=022
+
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
